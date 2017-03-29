@@ -118,7 +118,8 @@ lazy val transactionApi = (project in file("transaction-api"))
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       playJsonDerivedCodecs
-    )
+    ),
+    EclipseKeys.skipProject := true
   )
   .dependsOn(security)
 
@@ -133,7 +134,8 @@ lazy val transactionImpl = (project in file("transaction-impl"))
       lagomScaladslTestKit,
       macwire,
       scalaTest
-    )
+    ),
+    EclipseKeys.skipProject := true
   )
 
 lazy val userApi = (project in file("user-api"))
@@ -175,7 +177,8 @@ lazy val webGateway = (project in file("web-gateway"))
 
       "org.webjars" % "foundation" % "6.2.3",
       "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
-    )
+    ),
+    EclipseKeys.preTasks := Seq(compile in Compile)
   )
 
 def commonSettings: Seq[Setting[_]] = Seq(
