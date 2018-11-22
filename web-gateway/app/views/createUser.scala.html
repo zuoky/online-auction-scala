@@ -1,6 +1,6 @@
 @import helper._
 
-@(createUser: Form[CreateUserForm])(implicit nav: Nav)
+@(createUser: Form[CreateUserForm])(implicit nav: Nav, request: RequestHeader)
 
 @main(Messages("createUser")) {
 

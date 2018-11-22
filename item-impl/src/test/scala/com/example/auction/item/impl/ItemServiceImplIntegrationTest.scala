@@ -18,10 +18,6 @@ import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 import scala.concurrent.{ Future, Promise }
 
-
-/**
-  *
-  */
 class ItemServiceImplIntegrationTest extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 
   private val server = ServiceTest.startServer(ServiceTest.defaultSetup.withCassandra(true)) { ctx =>
@@ -62,7 +58,7 @@ class ItemServiceImplIntegrationTest extends AsyncWordSpec with Matchers with Be
       } yield {
         awaitSuccess() {
           for {
-            items <- itemService.getItemsForUser(tom, api.ItemStatus.Created, None, None).invoke()
+            items <- itemService.getItemsForUser(tom, api.ItemStatus.Created, None).invoke()
           } yield {
             items.count should ===(1)
             items.items should contain only ItemSummary(createdTomItem.safeId, tomItem.title, tomItem.currencyId,

@@ -2,7 +2,7 @@
 
 [![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)](https://gitter.im/lagom/lagom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [<img src="https://img.shields.io/travis/lagom/lagom.svg"/>](https://travis-ci.org/lagom/lagom)
 
-# INTRO
+# Introduction
 Lagom is a Swedish word meaning just right, sufficient. Microservices are about creating services that are just the right size, that is, they have just the right level of functionality and isolation to be able to adequately implement a scalable and resilient system.
 
 Lagom focuses on ensuring that your application realises the full potential of the [Reactive Manifesto](http://reactivemanifesto.org/), while delivering a high productivity development environment, and seamless production deployment experience.
@@ -47,10 +47,17 @@ Check the docs for each service for details on the **commands** and **queries** 
 
 ## Good to know
 
-- Hello World Gitter8 seed
+- Hello World Giter8 seed
 
-For a simple, gentler, introduction to Lagom, have a look at the [Hello World gitter8 seed project](https://www.lagomframework.com/get-started-scala.html) in the docs.
+For a simple, gentler, introduction to Lagom, have a look at the [Hello World giter8 seed project](https://www.lagomframework.com/get-started-scala.html) in the docs.
 
 - Getting help
 
 If you have any troubles and need help, feel free to ask in the [Gitter channel](https://gitter.im/lagom/lagom)
+
+## Running: Kubernetes
+
+This project uses [Lightbend Orchestration for Kubernetes](https://developer.lightbend.com/docs/lightbend-orchestration-kubernetes/latest/) to
+simplify deployment to [Kubernetes](https://kubernetes.io/).
+
+Refer to [KUBERNETES.md](KUBERNETES.md) for more information on this process.

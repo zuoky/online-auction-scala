@@ -1,17 +1,18 @@
 package controllers
 
-import java.util.{Locale, UUID}
+import java.util.{ Locale, UUID }
 
 import com.example.auction.item.api.ItemStatus
-import com.example.auction.user.api.{CreateUser, UserService}
+import com.example.auction.user.api.{ CreateUser, UserService }
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.MessagesApi
-import play.api.mvc.Action
+import play.api.mvc.ControllerComponents
 
 import scala.concurrent.ExecutionContext
 
-class Main(messagesApi: MessagesApi, userService: UserService)(implicit ec: ExecutionContext) extends AbstractController(messagesApi, userService) {
+class Main(userService: UserService, controllerComponents: ControllerComponents)
+  (implicit ec: ExecutionContext)
+  extends AbstractAuctionController(userService, controllerComponents) {
 
   val form = Form(mapping(
     "name" -> nonEmptyText
@@ -41,7 +42,7 @@ class Main(messagesApi: MessagesApi, userService: UserService)(implicit ec: Exec
       createUserForm => {
         userService.createUser.invoke(CreateUser(createUserForm.name))
           .map { user =>
-          Redirect(routes.ProfileController.myItems(ItemStatus.Completed.toString.toLowerCase(Locale.ENGLISH), None, None))
+          Redirect(routes.ProfileController.myItems(ItemStatus.Completed.toString.toLowerCase(Locale.ENGLISH), None))
             .withSession("user" -> user.id.toString)
         }
         .recoverWith {

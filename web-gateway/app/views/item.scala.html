@@ -5,9 +5,10 @@
 @import com.example.auction.bidding.api.BidResultStatus._
 @import java.util.UUID
 @import controllers.{Currency => Currencies}
+@import helper._
 
 @(item: Item, bidForm: Form[BidForm], biddingHistory: Seq[AnonymousBid], currentUser: UUID, currency: Currencies,
-        seller: User, winner: Option[User], currentMaximumBid: Option[Int], bidResult: Option[BidResult])(implicit nav: Nav)
+        seller: User, winner: Option[User], currentMaximumBid: Option[Int], bidResult: Option[BidResult])(implicit nav: Nav, request: RequestHeader)
 
 @renderBidResult(icon: String, callout: String, bidMessage: String, result: BidResult) = {
     
@@ -96,6 +97,7 @@
 
     @if(currentUser == item.creator && item.status == ItemStatus.Created) {
         <form action="@routes.ItemController.startAuction(item.safeId)" method="POST">
+            @CSRF.formField
             <input class="button success" type="submit" value="@Messages("startAuction")"/>
         </form>
     }
