@@ -5,27 +5,27 @@ import java.util.UUID
 
 import akka.stream.scaladsl.Sink
 import com.example.auction.item.api
-import com.example.auction.item.api.{ ItemService, ItemSummary }
+import com.example.auction.item.api.{ItemService, ItemSummary}
 import com.example.auction.security.ClientSecurity._
 import com.lightbend.lagom.scaladsl.api.AdditionalConfiguration
-import com.lightbend.lagom.scaladsl.server.{ LagomApplication, LocalServiceLocator }
-import com.lightbend.lagom.scaladsl.testkit.{ ServiceTest, TestTopicComponents }
-import org.scalatest.{ AsyncWordSpec, BeforeAndAfterAll, Matchers }
-import play.api.Configuration
+import com.lightbend.lagom.scaladsl.server.{LagomApplication, LocalServiceLocator}
+import com.lightbend.lagom.scaladsl.testkit.{ServiceTest, TestTopicComponents}
+import com.typesafe.config.ConfigFactory
+import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
 import play.api.libs.ws.ahc.AhcWSComponents
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration._
-import scala.concurrent.{ Future, Promise }
+import scala.concurrent.{Future, Promise}
 
 class ItemServiceImplIntegrationTest extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 
   private val server = ServiceTest.startServer(ServiceTest.defaultSetup.withCassandra(true)) { ctx =>
     new LagomApplication(ctx) with ItemComponents with LocalServiceLocator with AhcWSComponents with TestTopicComponents {
       override def additionalConfiguration: AdditionalConfiguration =
-        super.additionalConfiguration ++ Configuration.from(Map(
-          "cassandra-query-journal.eventual-consistency-delay" -> "0"
-        ))
+        super.additionalConfiguration ++ ConfigFactory.parseString(
+          "cassandra-query-journal.eventual-consistency-delay = 0"
+        )
     }
   }
 

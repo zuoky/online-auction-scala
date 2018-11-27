@@ -31,10 +31,9 @@ class AuctionSchedulerProcessor(readSide: CassandraReadSide, session: CassandraS
 
   def buildHandler = {
     readSide.builder[AuctionEvent]("auctionSchedulerOffset")
-      .setGlobalPrepare(createTable)
-      .setPrepare { tag =>
-        prepareStatements()
-      }.setEventHandler[AuctionStarted](insertAuction)
+      .setGlobalPrepare(() => createTable())
+      .setPrepare(_ => prepareStatements())
+      .setEventHandler[AuctionStarted](insertAuction)
       .setEventHandler[BiddingFinished.type](deleteAuction)
       .setEventHandler[AuctionCancelled.type](deleteAuction)
       .build()

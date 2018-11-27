@@ -127,7 +127,7 @@ private[impl] class ItemEventProcessor(session: CassandraSession, readSide: Cass
 
   def buildHandler = {
     readSide.builder[ItemEvent](ItemRepository.itemEventOffset)
-        .setGlobalPrepare(createTables)
+        .setGlobalPrepare(() => createTables())
         .setPrepare(_ => prepareStatements())
         .setEventHandler[ItemCreated](e => insertItem(e.event.item))
         .setEventHandler[AuctionStarted](e => doUpdateItemSummaryStatus(e.entityId, api.ItemStatus.Auction))
