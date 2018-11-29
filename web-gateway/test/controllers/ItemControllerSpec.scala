@@ -68,7 +68,7 @@ trait LagomFakeApplicationFactory extends FakeApplicationFactory {
   def fakeApplication(): Application = {
     // Default `mode` is `Mode.Test`
     val environment = Environment.simple()
-    val context = ApplicationLoader.createContext(environment)
+    val context = ApplicationLoader.Context.create(environment)
 
     new loader.WebGateway(context) with LagomServiceLocatorComponents {
 
