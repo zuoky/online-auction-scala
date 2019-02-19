@@ -5,7 +5,7 @@ import java.time.{Duration, Instant}
 import java.util.UUID
 
 import akka.NotUsed
-import com.example.auction.item.api.{Item, ItemService, ItemStatus}
+import com.example.auction.item.api.{Item, ItemData, ItemService, ItemStatus}
 import com.example.auction.user.api.{User, UserService}
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.rp.servicediscovery.lagom.scaladsl.LagomServiceLocatorComponents
@@ -47,14 +47,17 @@ object Items {
       Item(
         Some(foundId),
         Users.foundId,
-        "Found Item",
-        "A item that was found",
-        "USD",
-        1,
-        2,
+        ItemData(
+          "Found Item",
+          "A item that was found",
+          "USD",
+          1,
+          2,
+          Duration.ofDays(2),
+          None
+        ),
         Some(2),
         ItemStatus.Created,
-        Duration.ofDays(2),
         Some(Instant.now()),
         Some(Instant.now().plus(2L, ChronoUnit.DAYS)),
         None

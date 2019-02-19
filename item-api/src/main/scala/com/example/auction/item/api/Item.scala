@@ -10,14 +10,9 @@ import play.api.libs.json.{Format, Json}
 case class Item(
   id: Option[UUID],
   creator: UUID,
-  title: String,
-  description: String,
-  currencyId: String,
-  increment: Int,
-  reservePrice: Int,
+  itemData: ItemData,
   price: Option[Int],
   status: ItemStatus.Status,
-  auctionDuration: Duration,
   auctionStart: Option[Instant],
   auctionEnd: Option[Instant],
   auctionWinner: Option[UUID]
@@ -36,8 +31,20 @@ object Item {
     increment: Int,
     reservePrice: Int,
     auctionDuration: Duration
-  ) = Item(None, creator, title, description, currencyId, increment, reservePrice, None, ItemStatus.Created, auctionDuration,
-    None, None, None)
+  ) = Item(None, creator, ItemData(title, description, currencyId, increment, reservePrice, auctionDuration, None), None, ItemStatus.Created, None, None, None)
+}
+
+case class ItemData(title: String,
+                    description: String,
+                    currencyId: String,
+                    increment: Int,
+                    reservePrice: Int,
+                    auctionDuration: Duration,
+                    categoryId: Option[UUID]
+                   )
+
+object ItemData {
+  implicit val format: Format[ItemData] = Json.format
 }
 
 object ItemStatus extends Enumeration {

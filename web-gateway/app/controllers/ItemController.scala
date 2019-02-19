@@ -97,7 +97,7 @@ class ItemController(
             case _ => pItem
           }
 
-          val currency = Currency.valueOf(item.currencyId)
+          val currency = Currency.valueOf(item.itemData.currencyId)
           val bidResult = loadBidResult(rh.flash)
           Ok(views.html.item(cItem, bidForm, anonymizeBids(user, currency, bidHistory), user, currency, seller.get, winner,
             currentBidMaximum, bidResult))

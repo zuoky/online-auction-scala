@@ -11,15 +11,15 @@
         seller: User, winner: Option[User], currentMaximumBid: Option[Int], bidResult: Option[BidResult])(implicit nav: Nav, request: RequestHeader)
 
 @renderBidResult(icon: String, callout: String, bidMessage: String, result: BidResult) = {
-    
+
     <div class="@callout callout">
         <i class="fi-@icon"></i> @Messages(bidMessage, currency.format(result.currentPrice))
     </div>
 }
 
-@main(item.title) {
+@main(item.itemData.title) {
 
-    <h1>@item.title</h1>
+    <h1>@item.itemData.title</h1>
 
     @for(result <- bidResult) {
         @result.status match {
@@ -48,7 +48,7 @@
     }
 
     <p>
-        @item.description
+        @item.itemData.description
     </p>
 
     <dl>
@@ -59,15 +59,15 @@
         <dd>@currency.getDisplayName</dd>
 
         <dt>@Messages("increment")</dt>
-        <dd>@currency.format(item.increment)</dd>
+        <dd>@currency.format(item.itemData.increment)</dd>
 
     @if(currentUser == item.creator) {
         <dt>@Messages("reserve")</dt>
-        <dd>@currency.format(item.reservePrice)</dd>
+        <dd>@currency.format(item.itemData.reservePrice)</dd>
     }
 
         <dt>@Messages("duration")</dt>
-        <dd>@nav.formatDuration(item.auctionDuration)</dd>
+        <dd>@nav.formatDuration(item.itemData.auctionDuration)</dd>
 
     @if(item.status == ItemStatus.Auction || item.status == ItemStatus.Completed) {
         <dt>@Messages("auctionStart")</dt>
@@ -109,9 +109,9 @@
             </div>
         }
         @foundationForm(bidForm, routes.ItemController.placeBid(item.safeId)) {
-            @helper.inputText(bidForm("bid"), 'type -> "number", 'step -> currency.formatDecimal(item.increment),
-                'min -> currency.formatDecimal(item.price.getOrElse(0) + item.increment))
-            <input type="hidden" name="currency" value="@item.currencyId"/>
+            @helper.inputText(bidForm("bid"), 'type -> "number", 'step -> currency.formatDecimal(item.itemData.increment),
+                'min -> currency.formatDecimal(item.price.getOrElse(0) + item.itemData.increment))
+            <input type="hidden" name="currency" value="@item.itemData.currencyId"/>
             <input class="button success" type="submit" value="@Messages("placeBid")"/>
         }
     }
