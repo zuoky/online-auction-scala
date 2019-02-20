@@ -4,8 +4,8 @@ import java.util.UUID
 
 import akka.persistence.query.Offset
 import com.datastax.driver.core.utils.UUIDs
-import com.example.auction.item.api.ItemService
 import com.example.auction.item.api
+import com.example.auction.item.api.ItemService
 import com.example.auction.security.ServerSecurity._
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
@@ -36,8 +36,8 @@ class ItemServiceImpl(registry: PersistentEntityRegistry, itemRepository: ItemRe
       throw Forbidden("User " + userId + " can't created an item on behalf of " + item.creator)
     }
     val itemId = UUIDs.timeBased()
-    val pItem = Item(itemId, item.creator, item.title, item.description, item.currencyId, item.increment,
-      item.reservePrice, None, ItemStatus.Created, item.auctionDuration, None, None, None)
+    val pItem = Item(itemId, item.creator, item.itemData.title, item.itemData.description, item.itemData.currencyId,
+      item.itemData.increment, item.itemData.reservePrice, None, ItemStatus.Created, item.itemData.auctionDuration, None, None, None)
     entityRef(itemId).ask(CreateItem(pItem)).map { _ =>
       convertItem(pItem)
     }
@@ -69,9 +69,9 @@ class ItemServiceImpl(registry: PersistentEntityRegistry, itemRepository: ItemRe
   }
 
   private def convertItem(item: Item): api.Item = {
-    api.Item(Some(item.id), item.creator, item.title, item.description, item.currencyId, item.increment,
-      item.reservePrice, item.price, convertStatus(item.status), item.auctionDuration, item.auctionStart, item.auctionEnd,
-      item.auctionWinner)
+    val itemData = api.ItemData(item.title, item.description, item.currencyId, item.increment, item.reservePrice, item.auctionDuration, None)
+    api.Item(Some(item.id), item.creator, itemData, item.price, convertStatus(item.status), item.auctionStart,
+      item.auctionEnd, item.auctionWinner)
   }
 
   private def convertStatus(status: ItemStatus.Status): api.ItemStatus.Status = {

@@ -45,9 +45,9 @@ object IndexedItem {
     IndexedItem(itemId,
       creatorId = Some(item.creator),
       status = Some(ItemStatus.Completed.toString),
-      title = Some(item.title),
-      description = Some(item.description),
-      currencyId = Some(item.currencyId),
+      title = Some(item.itemData.title),
+      description = Some(item.itemData.description),
+      currencyId = Some(item.itemData.currencyId),
       price = Some(item.price.getOrElse(0)),
       winner = item.auctionWinner
       // TODO use start/end instant

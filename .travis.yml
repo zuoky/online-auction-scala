@@ -1,18 +1,33 @@
 language: scala
-dist: trusty
-sudo: required
-jdk:
-  - oraclejdk8
-script:
-  - sbt test
+
+env:
+  - TRAVIS_JDK=adopt@1.8.192-12
+  - TRAVIS_JDK=adopt@1.11.0-1
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: TRAVIS_JDK=adopt@1.11.0-1 # not fully supported but allows problem discovery
+
+before_install:
+  - curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash && . ~/.jabba/jabba.sh
+
+install:
+  - $JABBA_HOME/bin/jabba install $TRAVIS_JDK
+  - export JAVA_HOME="$JABBA_HOME/jdk/$TRAVIS_JDK" && export PATH="$JAVA_HOME/bin:$PATH" && java -Xmx32m -version
+
+script: sbt test
+
 cache:
   directories:
     - $HOME/.ivy2/cache
+    - $HOME/.jabba/jdk
+    - $HOME/.sbt
+
 before_cache:
-  # Ensure changes to the cache aren't persisted
-  - rm -rf $HOME/.ivy2/cache/com.example
-  # Delete all ivydata files since ivy touches them on each build
-  - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+
 notifications:
   webhooks:
     urls:
